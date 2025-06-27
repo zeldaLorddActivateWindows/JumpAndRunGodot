@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://ce5n4xqy3r6xw"]
+[gd_scene load_steps=10 format=3 uid="uid://ce5n4xqy3r6xw"]
 
 [ext_resource type="Script" uid="uid://5j1m20thi51s" path="res://scripts/Main.cs" id="1_0vt7n"]
 [ext_resource type="PackedScene" uid="uid://ct3r4a7oiv6hf" path="res://scenes/Player.tscn" id="2_m2c3j"]
@@ -41,8 +41,6 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_rarhs"]
-
 [node name="Main" type="Node2D"]
 script = ExtResource("1_0vt7n")
 
@@ -61,6 +59,7 @@ frame = 3
 frame_progress = 0.483233
 
 [node name="Platforms" type="Node2D" parent="."]
+y_sort_enabled = true
 texture_filter = 1
 
 [node name="Powerups" type="Node2D" parent="."]
@@ -86,7 +85,6 @@ color = Color(0, 0.8, 0, 1)
 
 [node name="Background" type="ColorRect" parent="."]
 z_index = -100
-material = SubResource("CanvasItemMaterial_rarhs")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
