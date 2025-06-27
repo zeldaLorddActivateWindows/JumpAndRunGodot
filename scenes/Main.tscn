@@ -1,0 +1,157 @@
+[gd_scene load_steps=4 format=3 uid="uid://ce5n4xqy3r6xw"]
+
+[ext_resource type="Script" uid="uid://5j1m20thi51s" path="res://scripts/Main.cs" id="1_0vt7n"]
+[ext_resource type="PackedScene" uid="uid://ct3r4a7oiv6hf" path="res://scenes/Player.tscn" id="2_m2c3j"]
+[ext_resource type="PackedScene" uid="uid://bqxpvyuiavjj4" path="res://scenes/UI.tscn" id="3_bqxpv"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_0vt7n")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(400, 300)
+
+[node name="Player" parent="." instance=ExtResource("2_m2c3j")]
+position = Vector2(100, 400)
+
+[node name="Platforms" type="Node2D" parent="."]
+
+[node name="Powerups" type="Node2D" parent="."]
+
+[node name="Ground" type="StaticBody2D" parent="."]
+position = Vector2(0, 500)
+
+[node name="GroundShape" type="CollisionShape2D" parent="Ground"]
+
+[node name="GroundVisual" type="ColorRect" parent="Ground"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -50.0
+offset_right = 400.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.8, 0, 1)
+
+[node name="Background" type="ColorRect" parent="."]
+z_index = -100
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 800.0
+offset_bottom = 600.0
+color = Color(0.529412, 0.807843, 0.921569, 1)
+
+[node name="UI" parent="." instance=ExtResource("3_bqxpv")]
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GameOverScreen" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 800.0
+offset_bottom = 600.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GameOverBG" type="ColorRect" parent="GameOverScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="GameOverLabel" type="Label" parent="GameOverScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -50.0
+offset_right = 100.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "GAME OVER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScoreLabel" type="Label" parent="GameOverScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_right = 80.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Final Score: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RestartLabel" type="Label" parent="GameOverScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = 40.0
+offset_right = 80.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Press R to restart"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FallingScreen" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 800.0
+offset_bottom = 600.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FallingBG" type="ColorRect" parent="FallingScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0, 0, 0.392157)
+
+[node name="FallingLabel" type="Label" parent="FallingScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -20.0
+offset_right = 50.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "FALLING!"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -1,0 +1,14 @@
+ea4bc82a6ad023ab7ee23ee620429895
+::res://::1751011620
+::res://scenes/::1751011206
+Main.tscn::PackedScene::5116370417371827304::1751011622::0::1::::<><><>0<>0<><>::uid://5j1m20thi51s::::res://scripts/Main.cs<>uid://ct3r4a7oiv6hf::::res://scenes/Player.tscn<>uid://bqxpvyuiavjj4::::res://scenes/UI.tscn
+Platform.tscn::PackedScene::3484257321722351636::1751011622::0::1::::<><><>0<>0<><>::uid://dd2k8i888x7w5::::res://scripts/Platform.cs
+Player.tscn::PackedScene::6165316000604152407::1751011622::0::1::::<><><>0<>0<><>::uid://pgeiwpdr5ln7::::res://scripts/Player.cs
+PowerupMultiplier.tscn::PackedScene::7125945368301439486::1751011622::0::1::::<><><>0<>0<><>::uid://csstlwwxwtv7n::::res://scripts/PowerupMultiplier.cs
+UI.tscn::PackedScene::3557872418629305115::1751011622::0::1::::<><><>0<>0<><>::uid://bl4jv6n0qb6ji::::res://scripts/UI.cs
+::res://scripts/::1751011600
+Main.cs::CSharpScript/CSharpScript::2125846237889838030::1751011535::0::1::::<><><>0<>0<><>::
+Platform.cs::CSharpScript/CSharpScript::7426233355189297202::1751011291::0::1::::<><><>0<>0<><>::
+Player.cs::CSharpScript/CSharpScript::1065477254263135142::1751011354::0::1::::<><><>0<>0<><>::
+PowerupMultiplier.cs::CSharpScript/CSharpScript::6074573809613964281::1751011341::0::1::::<><><>0<>0<><>::
+UI.cs::CSharpScript/CSharpScript::3218950522649746078::1751011374::0::1::::<><><>0<>0<><>::

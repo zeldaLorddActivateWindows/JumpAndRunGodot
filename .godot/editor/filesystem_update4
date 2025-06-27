@@ -1,0 +1,10 @@
+res://scenes/Main.tscn
+res://scenes/Platform.tscn
+res://scenes/Player.tscn
+res://scenes/PowerupMultiplier.tscn
+res://scenes/UI.tscn
+res://scripts/Main.cs
+res://scripts/Platform.cs
+res://scripts/Player.cs
+res://scripts/PowerupMultiplier.cs
+res://scripts/UI.cs
