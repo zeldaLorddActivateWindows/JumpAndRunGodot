@@ -23,28 +23,20 @@ public partial class UI : Control
 
     public void UpdateUI(Player player, int platformCount, int powerupCount)
     {
-        // Update status
         string groundedText = player.IsGrounded ? "Grounded" : "Airborne";
         statusLabel.Text = $"Status: {groundedText}";
-        
-        // Update double jump status
+        statusLabel.Visible = true;
         if (!player.IsGrounded)
         {
             string doubleJumpText = player.CanDoubleJump ? "Double Jump Available" : "Double Jump Used";
             doubleJumpLabel.Text = doubleJumpText;
             doubleJumpLabel.Visible = true;
         }
-        else
-        {
-            doubleJumpLabel.Visible = false;
-        }
-        
-        // Update score and height
+        else doubleJumpLabel.Visible = false;
         scoreLabel.Text = $"Score: {player.Score:F0}";
         float height = Math.Max(0, 500 - player.GlobalPosition.Y);
         heightLabel.Text = $"Height: {height:F0}m";
-        
-        // Update counts
+        heightLabel.Visible = true;
         platformsLabel.Text = $"Platforms: {platformCount}";
         powerupsLabel.Text = $"Powerups: {powerupCount}";
     }

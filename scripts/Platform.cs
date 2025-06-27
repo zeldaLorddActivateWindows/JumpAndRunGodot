@@ -2,31 +2,34 @@ using Godot;
 
 public partial class Platform : StaticBody2D
 {
-	private ColorRect platformVisual;
-	private ColorRect platformBorder;
-	private CollisionShape2D collisionShape;
-	
+	private CollisionShape2D _collisionShape;
+	private ColorRect _visual;
+	private ColorRect _border;
+
 	public override void _Ready()
 	{
-		platformVisual = GetNode<ColorRect>("PlatformVisual");
-		platformBorder = GetNode<ColorRect>("PlatformBorder");
-		collisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
+		_collisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
+		_visual = GetNode<ColorRect>("PlatformVisual");
+		_border = GetNode<ColorRect>("PlatformBorder");		
 	}
-	
+
 	public void SetSize(float width, float height)
 	{
-		// Update visual elements
-		platformVisual.Size = new Vector2(width, height);
-		platformVisual.Position = new Vector2(-width / 2, -height / 2);
-		
-		platformBorder.Size = new Vector2(width, height);
-		platformBorder.Position = new Vector2(-width / 2, -height / 2);
-		
-		// Update collision shape
-		var shape = collisionShape.Shape as RectangleShape2D;
-		if (shape != null)
+		if (_collisionShape?.Shape is RectangleShape2D rectShape) rectShape.Size = new Vector2(width, height);
+		if (_visual != null)
 		{
-			shape.Size = new Vector2(width, height);
+			_visual.OffsetLeft = -width/2;
+			_visual.OffsetRight = width/2;
+			_visual.OffsetTop = -height/2;
+			_visual.OffsetBottom = height/2;
+		}
+
+		if (_border != null)
+		{
+			_border.OffsetLeft = -width/2;
+			_border.OffsetRight = width/2;
+			_border.OffsetTop = -height/2;
+			_border.OffsetBottom = height/2;
 		}
 	}
 }

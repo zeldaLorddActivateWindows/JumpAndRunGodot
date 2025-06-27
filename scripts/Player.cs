@@ -51,14 +51,11 @@ public partial class Player : CharacterBody2D
         }
 
         MoveAndSlide();
-
-        // Update score based on height
         if (GlobalPosition.Y < highestY)
         {
             highestY = GlobalPosition.Y;
             Score = Math.Max(0, (GroundLevel - highestY) / 10) * scoreMultiplier;
         }
-
         ClampToScreenBounds();
     }
 
@@ -92,22 +89,10 @@ public partial class Player : CharacterBody2D
     private void HandleInput(float delta)
     {
         Vector2 velocity = Velocity;
+        if (Input.IsActionPressed("move_left")) velocity.X = -XVelocity;
+        else if (Input.IsActionPressed("move_right")) velocity.X = XVelocity;
+        else velocity.X = 0;
 
-        // Handle horizontal movement
-        if (Input.IsActionPressed("move_left"))
-        {
-            velocity.X = -XVelocity;
-        }
-        else if (Input.IsActionPressed("move_right"))
-        {
-            velocity.X = XVelocity;
-        }
-        else
-        {
-            velocity.X = 0;
-        }
-
-        // Handle jumping
         if (Input.IsActionJustPressed("jump"))
         {
             if (IsGrounded || coyoteTime > 0)
@@ -123,7 +108,6 @@ public partial class Player : CharacterBody2D
                 CanDoubleJump = false;
             }
         }
-
         Velocity = velocity;
     }
 }
