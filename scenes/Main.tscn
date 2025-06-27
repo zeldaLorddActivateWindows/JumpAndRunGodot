@@ -46,6 +46,7 @@ script = ExtResource("1_0vt7n")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(400, 300)
+limit_smoothed = true
 
 [node name="Player" parent="." instance=ExtResource("2_m2c3j")]
 position = Vector2(100, 400)

@@ -10,9 +10,11 @@ size = Vector2(100, 15)
 script = ExtResource("1_0vt7n")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("RectangleShape2D_1h8kl")
 
 [node name="PlatformVisual" type="ColorRect" parent="."]
+visible = false
 offset_left = -50.0
 offset_top = -7.5
 offset_right = 50.0
@@ -20,6 +22,7 @@ offset_bottom = 7.5
 color = Color(0.647059, 0.164706, 0.164706, 1)
 
 [node name="PlatformBorder" type="ColorRect" parent="."]
+visible = false
 offset_left = -50.0
 offset_top = -7.5
 offset_right = 50.0
