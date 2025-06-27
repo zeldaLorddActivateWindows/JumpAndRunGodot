@@ -12,6 +12,7 @@ public partial class Main : Node2D
 	private List<Platform> platforms = new List<Platform>();
 	private List<PowerupMultiplier> powerups = new List<PowerupMultiplier>();
 	private float lastPlatformY = 400;
+	private float lastPlatformX = 400; // Track last platform X position
 	private Random random = new Random();
 	
 	private bool isGameOver = false;
@@ -29,6 +30,7 @@ public partial class Main : Node2D
 	private float lastValidY = 400f;
 	private const float GROUND_LEVEL = 500f;
 	private const float DEATH_BOUNDARY = 700f;
+	private const float MAX_PLATFORM_DISTANCE = 180f; // Maximum horizontal distance between platforms
 
 	public override void _Ready()
 	{
@@ -108,7 +110,18 @@ public partial class Main : Node2D
 			return;
 		}
 
-		if (camera != null) camera.GlobalPosition = new Vector2(camera.GlobalPosition.X, Math.Min(player.GlobalPosition.Y, lastValidY));
+		// Update camera to follow player both vertically and horizontally
+		if (camera != null) 
+		{
+			Vector2 targetPos = new Vector2(player.GlobalPosition.X, Math.Min(player.GlobalPosition.Y, lastValidY));
+			camera.GlobalPosition = targetPos;
+		}
+
+		// Update UI position to follow camera/player
+		if (ui != null && camera != null)
+		{
+			ui.GlobalPosition = camera.GlobalPosition - GetViewportRect().Size / 2;
+		}
 
 		if (player.GlobalPosition.Y < lastValidY - 50)
 		{
@@ -117,7 +130,7 @@ public partial class Main : Node2D
 			CleanupPlatforms();
 			GeneratePlatforms();
 		}
-			ui?.UpdateUI(player, platforms.Count, powerups.Count(p => p?.IsCollected == false));
+		ui?.UpdateUI(player, platforms.Count, powerups.Count(p => p?.IsCollected == false));
 	}
 
 	private void StartDying()
@@ -125,6 +138,12 @@ public partial class Main : Node2D
 		isDying = true;
 		deathTimer = 0f;
 		fallingScreen?.CallDeferred("set_visible", true);
+		
+		// Update falling screen position to follow camera
+		if (fallingScreen != null && camera != null)
+		{
+			fallingScreen.GlobalPosition = camera.GlobalPosition - GetViewportRect().Size / 2;
+		}
 	}
 
 	private void ShowGameOver()
@@ -134,6 +153,11 @@ public partial class Main : Node2D
 		var scoreLabel = gameOverScreen?.GetNodeOrNull<Label>("ScoreLabel");
 		if (scoreLabel != null) scoreLabel.Text = $"Final Score: {player?.Score ?? 0:F0}";
 		
+		// Update game over screen position to follow camera
+		if (gameOverScreen != null && camera != null)
+		{
+			gameOverScreen.GlobalPosition = camera.GlobalPosition - GetViewportRect().Size / 2;
+		}
 	}
 
 	private void OnPlayerDied() => StartDying();
@@ -146,11 +170,17 @@ public partial class Main : Node2D
 		foreach (Node child in platformsContainer.GetChildren()) child?.QueueFree();
 		foreach (Node child in powerupsContainer.GetChildren()) child?.QueueFree();
 		
-		
 		platforms.Clear();
 		powerups.Clear();
 		player?.Reset();
 		if (camera != null) camera.GlobalPosition = new Vector2(400, 300);
+		
+		// Reset UI position
+		if (ui != null)
+		{
+			ui.GlobalPosition = Vector2.Zero;
+		}
+		
 		gameOverScreen?.CallDeferred("set_visible", false);
 		fallingScreen?.CallDeferred("set_visible", false);
 		
@@ -171,7 +201,11 @@ public partial class Main : Node2D
 			new { x = 500f, y = 120f, width = 80f }
 		};
 
-		foreach (var platformData in initialPlatforms) CreatePlatform(platformData.x, platformData.y, platformData.width);
+		foreach (var platformData in initialPlatforms) 
+		{
+			CreatePlatform(platformData.x, platformData.y, platformData.width);
+			lastPlatformX = platformData.x; // Update last platform X
+		}
 		lastPlatformY = 120;
 	}
 
@@ -180,29 +214,47 @@ public partial class Main : Node2D
 		while (platforms.Count < maxPlatforms)
 		{
 			float newY = lastPlatformY - random.Next(60, 120);
-			float newX = random.Next(50, (int)GetViewportRect().Size.X - 200);
 			float newWidth = random.Next(80, 150);
-			newX = Math.Max(0, Math.Min(newX, GetViewportRect().Size.X - newWidth));
-
-			bool tooFar = true;
-			int attempts = 0;
-			while (tooFar && attempts < 10)
+			
+			// Calculate X position within jumping distance of last platform
+			float minDistance = 80f; // Minimum distance to avoid platforms being too close
+			float maxDistance = MAX_PLATFORM_DISTANCE; // Maximum distance for reachability
+			
+			// Generate a random direction and distance
+			bool goLeft = random.Next(0, 2) == 0;
+			float distance = random.Next((int)minDistance, (int)maxDistance);
+			float newX = goLeft ? lastPlatformX - distance : lastPlatformX + distance;
+			
+			// Ensure platform stays within screen bounds with some margin
+			float screenWidth = GetViewportRect().Size.X;
+			float margin = 100f;
+			newX = Math.Max(margin, Math.Min(newX, screenWidth - newWidth - margin));
+			
+			// If the clamping moved the platform too far, try the opposite direction
+			if (Math.Abs(newX - lastPlatformX) > maxDistance)
 			{
-				float minX = Math.Max(0, newX - 200);
-				float maxX = Math.Min(GetViewportRect().Size.X - newWidth, newX + 200);
-				newX = random.Next((int)minX, (int)maxX);
-
-				tooFar = platforms.Any(p => p != null && Math.Abs(p.GlobalPosition.X - newX) > 300);
-				attempts++;
+				newX = goLeft ? lastPlatformX + distance : lastPlatformX - distance;
+				newX = Math.Max(margin, Math.Min(newX, screenWidth - newWidth - margin));
+			}
+			
+			// Final safety check - if still too far, place it closer
+			if (Math.Abs(newX - lastPlatformX) > maxDistance)
+			{
+				newX = lastPlatformX + (goLeft ? -maxDistance + 20 : maxDistance - 20);
+				newX = Math.Max(margin, Math.Min(newX, screenWidth - newWidth - margin));
 			}
 
 			CreatePlatform(newX, newY, newWidth);
+			
+			// Occasionally add powerups
 			if (random.Next(0, 100) < 15)
 			{
 				float powerupX = newX + random.Next(0, (int)newWidth - 20);
 				float powerupY = newY - 25;
 				CreatePowerup(powerupX, powerupY);
 			}
+			
+			lastPlatformX = newX;
 			lastPlatformY = newY;
 		}
 	}
