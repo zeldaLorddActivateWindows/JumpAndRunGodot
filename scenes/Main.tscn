@@ -1,8 +1,45 @@
-[gd_scene load_steps=4 format=3 uid="uid://ce5n4xqy3r6xw"]
+[gd_scene load_steps=10 format=3 uid="uid://ce5n4xqy3r6xw"]
 
 [ext_resource type="Script" uid="uid://5j1m20thi51s" path="res://scripts/Main.cs" id="1_0vt7n"]
 [ext_resource type="PackedScene" uid="uid://ct3r4a7oiv6hf" path="res://scenes/Player.tscn" id="2_m2c3j"]
 [ext_resource type="PackedScene" uid="uid://bqxpvyuiavjj4" path="res://scenes/UI.tscn" id="3_bqxpv"]
+[ext_resource type="Texture2D" uid="uid://hr1vjml3f8rd" path="res://assets/sprites/knight.png" id="3_rarhs"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rarhs"]
+atlas = ExtResource("3_rarhs")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vcsgt"]
+atlas = ExtResource("3_rarhs")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c01mt"]
+atlas = ExtResource("3_rarhs")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nxtc6"]
+atlas = ExtResource("3_rarhs")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_q8u5g"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rarhs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vcsgt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c01mt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nxtc6")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_0vt7n")
@@ -12,6 +49,14 @@ position = Vector2(400, 300)
 
 [node name="Player" parent="." instance=ExtResource("2_m2c3j")]
 position = Vector2(100, 400)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player"]
+position = Vector2(1, -6.99999)
+scale = Vector2(3.3125, 2.3125)
+sprite_frames = SubResource("SpriteFrames_q8u5g")
+autoplay = "default"
+frame = 3
+frame_progress = 0.483233
 
 [node name="Platforms" type="Node2D" parent="."]
 
@@ -46,6 +91,10 @@ offset_bottom = 600.0
 color = Color(0.529412, 0.807843, 0.921569, 1)
 
 [node name="UI" parent="." instance=ExtResource("3_bqxpv")]
+offset_left = -3.0
+offset_top = -1.0
+offset_right = 797.0
+offset_bottom = 599.0
 grow_horizontal = 2
 grow_vertical = 2
 
