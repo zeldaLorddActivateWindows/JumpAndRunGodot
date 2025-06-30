@@ -53,10 +53,10 @@ public partial class Player : CharacterBody2D
 			
 			// Airborne animation
 			if(Velocity.Y < 0){
-				animatedSprite.Play("jump" + currentDirection);
+				animatedSprite.Play("jump_" + currentDirection);
 			}
 			else{
-				animatedSprite.Play("fall" + currentDirection);
+				animatedSprite.Play("fall_" + currentDirection);
 			}
 		}
 		else
@@ -69,7 +69,7 @@ public partial class Player : CharacterBody2D
 		// Only play idle if not moving horizontally
 		if (Mathf.Abs(Velocity.X) < 0.1f)
 		{
-			animatedSprite.Play("idle_right" + currentDirection);
+			animatedSprite.Play("idle_" + currentDirection);
 		}
 
 		MoveAndSlide();
@@ -137,14 +137,14 @@ public partial class Player : CharacterBody2D
 				velocity.Y = -JumpStrength;
 				IsGrounded = false;
 				coyoteTime = 0;
-				animatedSprite.Play("jump" + currentDirection);
+				animatedSprite.Play("jump_" + currentDirection);
 			}
 			else if (CanDoubleJump && !hasDoubleJumped)
 			{
 				velocity.Y = -JumpStrength;
 				hasDoubleJumped = true;
 				CanDoubleJump = false;
-				animatedSprite.Play("jump"+ currentDirection);
+				animatedSprite.Play("jump_" + currentDirection);
 			}
 		}
 		Velocity = velocity;
