@@ -1,6 +1,6 @@
 using Godot;
+using JumpAndRun.scripts;
 using System;
-
 
 public partial class Player : CharacterBody2D
 {
@@ -16,10 +16,10 @@ public partial class Player : CharacterBody2D
 	public int Height { get; set; } = 40;
 	
 	// Animation
-	private AnimatedSprite2D animatedSprite; 
-	private string currentDirection = "right"; 
-	private bool wasGrounded = false; 
-	
+	private AnimatedSprite2D animatedSprite;
+	private string currentDirection = "right";
+	private bool wasGrounded = false;
+
 	private const float Gravity = 980;
 	private const float MaxFallSpeed = 800;
 	private const float GroundLevel = 500;
@@ -29,6 +29,11 @@ public partial class Player : CharacterBody2D
 	private const float CoyoteTimeLimit = 0.1f;
 	private float scoreMultiplier = 1.0f;
 	private Label nameLabel;
+	private bool isOnIce = false;
+	private float iceTimer = 0f;
+	private const float IceEffectDuration = 2f;
+	private float iceSlipFactor = 0.7f;
+	private bool wasOnFloorLastFrame = false;
 
 	public override void _Ready()
 	{
@@ -46,45 +51,96 @@ public partial class Player : CharacterBody2D
 		bool wasGrounded = IsGrounded;
 		IsGrounded = IsOnFloor();
 
+		if (isOnIce)
+		{
+			iceTimer -= (float)delta;
+			if (iceTimer <= 0)
+			{
+				isOnIce = false;
+			}
+		}
+
 		if (!IsGrounded)
 		{
 			Velocity = new Vector2(Velocity.X, Math.Min(Velocity.Y + Gravity * (float)delta, MaxFallSpeed));
 			coyoteTime = wasGrounded ? CoyoteTimeLimit : Math.Max(0, coyoteTime - (float)delta);
-			
 			// Airborne animation
-			if(Velocity.Y < 0){
+			if (Velocity.Y < 0)
+			{
 				animatedSprite.Play("jump_" + currentDirection);
 			}
-			else{
+			else
+			{
 				animatedSprite.Play("fall_" + currentDirection);
 			}
 		}
+		
+		
 		else
 		{
 			coyoteTime = CoyoteTimeLimit;
 			hasDoubleJumped = false;
 			CanDoubleJump = true;
+			// Only play idle if not moving horizontally
+			if (Mathf.Abs(Velocity.X) < 0.1f)
+			{
+				animatedSprite.Play("idle_" + currentDirection);
+			}
 		}
 		
-		// Only play idle if not moving horizontally
-		if (Mathf.Abs(Velocity.X) < 0.1f)
-		{
-			animatedSprite.Play("idle_" + currentDirection);
-		}
 
 		MoveAndSlide();
+
+		CheckPlatformCollisions();
+
 		if (GlobalPosition.Y < highestY)
 		{
 			highestY = GlobalPosition.Y;
 			Score = Math.Max(0, (GroundLevel - highestY) / 10) * scoreMultiplier;
 		}
+
 		ClampToScreenBounds();
+		wasOnFloorLastFrame = IsOnFloor();
+	}
+
+	private void CheckPlatformCollisions()
+	{
+		// Check if we just landed (transition from not on floor to on floor)
+		if (IsOnFloor() && !wasOnFloorLastFrame)
+		{
+			for (int i = 0; i < GetSlideCollisionCount(); i++)
+			{
+				var collision = GetSlideCollision(i);
+				var collider = collision.GetCollider();
+
+				// Check for special platform types and call their OnPlayerLanded methods
+				switch (collider)
+				{
+					case GoldPlatform goldPlatform:
+						goldPlatform.OnPlayerLanded(this);
+						break;
+					case IcyPlatform icyPlatform:
+						icyPlatform.OnPlayerLanded(this);
+						break;
+					case RoughPlatform roughPlatform:
+						roughPlatform.OnPlayerLanded(this);
+						break;
+				}
+			}
+		}
+	}
+
+	public void ApplyIceEffect()
+	{
+		isOnIce = true;
+		iceTimer = IceEffectDuration;
+		GD.Print("Ice effect applied to player");
 	}
 
 	public void ApplyScoreMultiplier(float multiplier)
 	{
 		scoreMultiplier *= multiplier;
-		Score *= multiplier;
+		GD.Print($"Score multiplier applied: {multiplier:F1}x, total multiplier: {scoreMultiplier:F2}x");
 	}
 
 	public void Reset()
@@ -98,6 +154,12 @@ public partial class Player : CharacterBody2D
 		highestY = 400;
 		coyoteTime = 0f;
 		scoreMultiplier = 1.0f;
+		isOnIce = false;
+		iceTimer = 0f;
+		wasOnFloorLastFrame = false;
+
+		// Reset jump strength to default
+		JumpStrength = 400;
 	}
 
 	private void ClampToScreenBounds()
@@ -110,26 +172,40 @@ public partial class Player : CharacterBody2D
 
 	private void HandleInput(float delta)
 	{
-		
 		Vector2 velocity = Velocity;
-		
-		// Horizontal movement and animation
-		if (Input.IsActionPressed("move_left")){
+
+		float currentXVelocity = XVelocity;
+		if (isOnIce && IsGrounded)
+		{
+			currentXVelocity *= iceSlipFactor;
+			velocity.X *= 0.9f; // Gradual deceleration on ice
+		}
+
+		if (Input.IsActionPressed("move_left"))
+		{
 			velocity.X = -XVelocity;
 			currentDirection = "left";
-			if(IsGrounded) animatedSprite.Play("walk_left");
+			if (IsGrounded) animatedSprite.Play("walk_left");
+			if (isOnIce && IsGrounded)
+				velocity.X -= currentXVelocity * delta * 3;
+			else
+				velocity.X = -currentXVelocity;
 		}
-		else if (Input.IsActionPressed("move_right")){
+		else if (Input.IsActionPressed("move_right"))
+		{
 			velocity.X = XVelocity;
 			currentDirection = "right";
-			if(IsGrounded) animatedSprite.Play("walk_right");
-			
+			if (IsGrounded) animatedSprite.Play("walk_right");
+			if (isOnIce && IsGrounded)
+				velocity.X += currentXVelocity * delta * 3;
+			else
+				velocity.X = currentXVelocity;
 		}
-		else{
+		else if (!isOnIce || !IsGrounded)
+		{
 			velocity.X = 0;
 		}
-		
-		// Jumping
+
 		if (Input.IsActionJustPressed("jump"))
 		{
 			if (IsGrounded || coyoteTime > 0)
