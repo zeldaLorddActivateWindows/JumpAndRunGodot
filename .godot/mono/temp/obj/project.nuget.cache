@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "MsQmQ6ZxfwI=",
+  "dgSpecHash": "6vGGYIDwteA=",
   "success": true,
-  "projectFilePath": "C:\\Users\\PC\\OneDrive - HTL Vöcklabruck\\Desktop\\GodotProjects\\JumpAndRunGodot\\JumpAndRun.csproj",
+  "projectFilePath": "C:\\Users\\Lajos\\JumpAndRunGodot\\JumpAndRun.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\PC\\.nuget\\packages\\godot.sourcegenerators\\4.4.1\\godot.sourcegenerators.4.4.1.nupkg.sha512",
-    "C:\\Users\\PC\\.nuget\\packages\\godotsharp\\4.4.1\\godotsharp.4.4.1.nupkg.sha512",
-    "C:\\Users\\PC\\.nuget\\packages\\godotsharpeditor\\4.4.1\\godotsharpeditor.4.4.1.nupkg.sha512"
+    "C:\\Users\\Lajos\\.nuget\\packages\\godot.sourcegenerators\\4.4.1\\godot.sourcegenerators.4.4.1.nupkg.sha512",
+    "C:\\Users\\Lajos\\.nuget\\packages\\godotsharp\\4.4.1\\godotsharp.4.4.1.nupkg.sha512",
+    "C:\\Users\\Lajos\\.nuget\\packages\\godotsharpeditor\\4.4.1\\godotsharpeditor.4.4.1.nupkg.sha512"
   ],
   "logs": []
 }
