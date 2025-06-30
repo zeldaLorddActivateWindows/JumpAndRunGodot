@@ -11,10 +11,6 @@ size = Vector2(40, 40)
 atlas = ExtResource("3_mdl7e")
 region = Rect2(0, 160, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_qu4a1"]
-atlas = ExtResource("3_mdl7e")
-region = Rect2(32, 160, 32, 32)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_70d11"]
 atlas = ExtResource("3_mdl7e")
 region = Rect2(64, 160, 32, 32)
@@ -26,6 +22,10 @@ region = Rect2(96, 160, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_khinc"]
 atlas = ExtResource("3_mdl7e")
 region = Rect2(128, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qu4a1"]
+atlas = ExtResource("2_3li8b")
+region = Rect2(224, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3li8b"]
 atlas = ExtResource("3_mdl7e")
@@ -90,9 +90,6 @@ animations = [{
 "texture": SubResource("AtlasTexture_mdl7e")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_qu4a1")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_70d11")
 }, {
 "duration": 1.0,
@@ -103,6 +100,14 @@ animations = [{
 }],
 "loop": true,
 "name": &"fall",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qu4a1")
+}],
+"loop": true,
+"name": &"idle_left",
 "speed": 10.0
 }, {
 "frames": [{
@@ -217,4 +222,4 @@ vertical_alignment = 2
 position = Vector2(1, -6.99999)
 scale = Vector2(3.3125, 2.3125)
 sprite_frames = SubResource("SpriteFrames_qu4a1")
-animation = &"walk_right"
+animation = &"idle_left"
