@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://deles352dhhui"]
 
-[ext_resource type="Script" uid="uid://dgik3p8v7kb11" path="res://scripts/PowerupJetpack.cs" id="1_miee4"]
+[ext_resource type="Script" path="res://scripts/PowerupJetpack.cs" id="1_miee4"]
 [ext_resource type="Texture2D" uid="uid://c5asko7m7vumx" path="res://assets/sprites/fruit.png" id="2_tpdev"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pkjmm"]
