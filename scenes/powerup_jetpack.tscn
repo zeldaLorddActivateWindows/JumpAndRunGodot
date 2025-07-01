@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://deles352dhhui"]
+
+[ext_resource type="Script" uid="uid://dgik3p8v7kb11" path="res://scripts/PowerupJetpack.cs" id="1_miee4"]
+[ext_resource type="Texture2D" uid="uid://c5asko7m7vumx" path="res://assets/sprites/fruit.png" id="2_tpdev"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pkjmm"]
+size = Vector2(14, 14)
+
+[node name="PowerupJetpack" type="Node2D"]
+script = ExtResource("1_miee4")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(1.03125, 0.96875)
+texture = ExtResource("2_tpdev")
+region_enabled = true
+region_rect = Rect2(0, 49.5943, 16.1378, 14.8383)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_pkjmm")
